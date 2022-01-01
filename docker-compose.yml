@@ -1,0 +1,91 @@
+version: '3'
+
+networks:
+  nginx-php74-mysql8-node:
+
+services:
+
+  # nginx
+  nginx-service:
+    image: nginx:stable-alpine
+    container_name: nginx-container
+    ports:
+      - "7000:80"
+    volumes:
+      - ./app:/var/www/project
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php74-service
+      - mysql8-service
+    networks:
+      - nginx-php74-mysql8-node
+
+  # php
+  php74-service:
+    build:
+      context: .
+      dockerfile: ./php/Dockerfile
+    container_name: php74-container
+    ports:
+      - "9600:9000"
+    volumes:
+      - ./app:/var/www/project
+    networks:
+      - nginx-php74-mysql8-node
+
+#  # phpmyadmin
+#  phpmyadmin:
+##    depends_on:
+##      -  mysql8-service-doctrine
+#    image: phpmyadmin/phpmyadmin
+#    restart: always
+#    environment:
+#      PMA_HOST: db_data
+#      MYSQL_ROOT_PASSWORD: password
+#    ports:
+#      - '8073:80'
+#    networks:
+#      - nginx-php74-mysql8-node
+  # mysql
+
+  # phpmyadmin
+  phpmyadmin:
+    depends_on:
+      -  mysql8-service-doctrine
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - '8076:80'
+    environment:
+      PMA_HOST: mysql8-service-doctrine
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - nginx-php74-mysql8-node
+  # Database
+  db_data:
+    image: mysql:5.7
+    volumes:
+      - ./mysql:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    networks:
+      - nginx-php74-mysql8-node
+  mysql8-service-doctrine:
+    image: mysql:8
+    container_name: nginx-php74-mysql8-node
+    ports:
+      - "4308:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: always # always restart unless stopped manually
+    environment:
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_PASSWORD: secret
+    networks:
+      - nginx-php74-mysql8-node
