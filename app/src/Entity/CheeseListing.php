@@ -65,7 +65,7 @@ class CheeseListing
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"cheese_listing:read"})
+     * @Groups({"cheese_listing:read", "user:read", "user:write"})
      * @Assert\NotBlank()
      */
     private $description;
