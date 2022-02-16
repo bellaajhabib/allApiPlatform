@@ -8,6 +8,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use App\Validator\IsValidOwner;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -16,16 +17,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *     collectionOperations={"get", "post"},
  *     itemOperations={
- *          "get"={
- *              "normalization_context"={"groups"={"cheese_listing:read", "cheese_listing:item:get"}},
+ *          "get",
+ *          "put"={
+ *              "access_control"="is_granted('EDIT', previous_object)",
+ *              "access_control_message"="Only the creator can edit a cheese listing"
  *          },
- *          "put"
+ *          "delete"={"access_control"="is_granted('ROLE_ADMIN')"}
  *     },
- *     shortName="cheeses",
- *     normalizationContext={"groups"={"cheese_listing:read"}, "swagger_definition_name"="Read"},
- *     denormalizationContext={"groups"={"cheese_listing:write"}, "swagger_definition_name"="Write"},
+ *     collectionOperations={
+ *          "get",
+ *          "post"={"access_control"="is_granted('ROLE_USER')"}
+ *     },
+ *     shortName="cheese",
  *     attributes={
  *          "pagination_items_per_page"=10,
  *          "formats"={"jsonld", "json", "html", "jsonhal", "csv"={"text/csv"}}
@@ -41,6 +45,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiFilter(RangeFilter::class, properties={"price"})
  * @ApiFilter(PropertyFilter::class)
  * @ORM\Entity(repositoryClass="App\Repository\CheeseListingRepository")
+ * @ORM\EntityListeners({"App\Doctrine\CheeseListingSetOwnerListener"})
  */
 class CheeseListing
 {
@@ -53,7 +58,7 @@ class CheeseListing
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"cheese_listing:read", "cheese_listing:write", "user:read", "user:write"})
+     * @Groups({"cheese:read", "cheese:write", "user:read", "user:write"})
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min=2,
@@ -65,7 +70,7 @@ class CheeseListing
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"cheese_listing:read", "user:read", "user:write"})
+     * @Groups({"cheese:read"})
      * @Assert\NotBlank()
      */
     private $description;
@@ -74,7 +79,7 @@ class CheeseListing
      * The price of this delicious cheese, in cents
      *
      * @ORM\Column(type="integer")
-     * @Groups({"cheese_listing:read", "cheese_listing:write", "user:read", "user:write"})
+     * @Groups({"cheese:read", "cheese:write", "user:read", "user:write"})
      * @Assert\NotBlank()
      */
     private $price;
@@ -92,8 +97,8 @@ class CheeseListing
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="cheeseListings")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"cheese_listing:read", "cheese_listing:write"})
-     * @Assert\Valid()
+     * @Groups({"cheese:read", "cheese:collection:post"})
+     * @IsValidOwner()
      */
     private $owner;
 
@@ -119,7 +124,7 @@ class CheeseListing
     }
 
     /**
-     * @Groups("cheese_listing:read")
+     * @Groups("cheese:read")
      */
     public function getShortDescription(): ?string
     {
@@ -140,7 +145,7 @@ class CheeseListing
     /**
      * The description of the cheese as raw text.
      *
-     * @Groups({"cheese_listing:write", "user:write"})
+     * @Groups({"cheese:write", "user:write"})
      * @SerializedName("description")
      */
     public function setTextDescription(string $description): self
@@ -170,7 +175,7 @@ class CheeseListing
     /**
      * How long ago in text that this cheese listing was added.
      *
-     * @Groups("cheese_listing:read")
+     * @Groups("cheese:read")
      */
     public function getCreatedAtAgo(): string
     {

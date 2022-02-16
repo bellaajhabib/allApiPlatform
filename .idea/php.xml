@@ -86,6 +86,28 @@
       <path value="$PROJECT_DIR$/app/vendor/symfony/cache-contracts" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/event-dispatcher-contracts" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/translation-contracts" />
+      <path value="$PROJECT_DIR$/app/vendor/doctrine/data-fixtures" />
+      <path value="$PROJECT_DIR$/app/vendor/fzaninotto/faker" />
+      <path value="$PROJECT_DIR$/app/vendor/theofidry/alice-data-fixtures" />
+      <path value="$PROJECT_DIR$/app/vendor/api-platform/api-pack" />
+      <path value="$PROJECT_DIR$/app/vendor/hautelook/alice-bundle" />
+      <path value="$PROJECT_DIR$/app/vendor/sebastian/recursion-context" />
+      <path value="$PROJECT_DIR$/app/vendor/sebastian/exporter" />
+      <path value="$PROJECT_DIR$/app/vendor/sebastian/diff" />
+      <path value="$PROJECT_DIR$/app/vendor/sebastian/comparator" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/profiler-pack" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/phpunit-bridge" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/monolog-bundle" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/monolog-bridge" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/webpack-encore-bundle" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/test-pack" />
+      <path value="$PROJECT_DIR$/app/vendor/myclabs/deep-copy" />
+      <path value="$PROJECT_DIR$/app/vendor/monolog/monolog" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/browser-kit" />
+      <path value="$PROJECT_DIR$/app/vendor/nelmio/alice" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/http-client" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/css-selector" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/dom-crawler" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1">
