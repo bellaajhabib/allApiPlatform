@@ -33,19 +33,19 @@ services:
     networks:
       - nginx-php74-mysql8-node
 
-#  # phpmyadmin
-#  phpmyadmin:
-##    depends_on:
-##      -  mysql8-service-doctrine
-#    image: phpmyadmin/phpmyadmin
-#    restart: always
-#    environment:
-#      PMA_HOST: db_data
-#      MYSQL_ROOT_PASSWORD: password
-#    ports:
-#      - '8073:80'
-#    networks:
-#      - nginx-php74-mysql8-node
+  #  # phpmyadmin
+  #  phpmyadmin:
+  ##    depends_on:
+  ##      -  mysql8-service-doctrine
+  #    image: phpmyadmin/phpmyadmin
+  #    restart: always
+  #    environment:
+  #      PMA_HOST: db_data
+  #      MYSQL_ROOT_PASSWORD: password
+  #    ports:
+  #      - '8073:80'
+  #    networks:
+  #      - nginx-php74-mysql8-node
   # mysql
 
   # phpmyadmin
