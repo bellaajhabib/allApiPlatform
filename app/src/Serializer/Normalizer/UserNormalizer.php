@@ -29,6 +29,9 @@ class UserNormalizer implements ContextAwareNormalizerInterface, CacheableSuppor
     {
         $isOwner = $this->userIsOwner($object);
         if ($isOwner) {
+            if (!\array_key_exists('groups', $context)) {
+                $context['groups'] = [];
+            }
             $context['groups'][] = 'owner:read';
         }
 

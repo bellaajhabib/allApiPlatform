@@ -128,6 +128,10 @@ class CheeseListing
      */
     public function getShortDescription(): ?string
     {
+        if (null === $this->description) {
+            return null;
+        }
+
         if (strlen($this->description) < 40) {
             return $this->description;
         }
